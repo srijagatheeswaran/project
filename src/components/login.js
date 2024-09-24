@@ -8,15 +8,17 @@ function Login() {
 
     //for routeing 
     const [show, setshow] = useState(false);
+    const [loader, setloader] = useState(false)
 
-    
+
+
     const navigation = useNavigate()
     useEffect(() => {
         const loginStatus = localStorage.getItem("login")
         if (loginStatus == "true") {
-            navigation('/profile')    
+            navigation('/profile')
         }
-        else{
+        else {
             setshow(true)
         }
     }, [navigation]);
@@ -37,12 +39,12 @@ function Login() {
 
         if (!inputs.email_or_mobilenumber) {
             errors.email = 'Email or mobile is required';
-        } 
+        }
 
         if (!inputs.Password) {
             errors.password = 'Password is required';
-        }    
-         return errors;
+        }
+        return errors;
     };
 
     //for store the form data and submit
@@ -54,13 +56,18 @@ function Login() {
 
     }
     //for submit 
+    const [reserror, setreserror] = useState({})
+    const [errshow, seterrshow] = useState(false)
+
     async function login(e) {
+
         e.preventDefault()
-        console.log(inputs)
+        // console.log(inputs)
         const errors = validate();
         setFormErrors(errors);
 
         if (Object.keys(errors).length === 0) {
+            setloader(true)
             setIsSubmitted(true);
             // console.log('Form data:', inputs);
             try {
@@ -72,22 +79,32 @@ function Login() {
                     body: JSON.stringify(inputs),
                 });
 
+                const data = await response.json();
                 if (response.ok) {
-                    const data = await response.json();
-                    // console.log('Success:', data);
-                    localStorage.setItem('authToken', data.token);
-                    localStorage.setItem('email',data.email_or_mobilenumber)
-                    localStorage.setItem('login', true);
-                    navigation('/profile');
-                } else {
-                    console.error('Error:', response.statusText);
-                    // Handle login error (e.g., display error message)
+                    // console.log('Success:', data);   
+                    if (data.message == 'Login failed. Check your email and password.') {
+                        // console.log(data.message);
+                        setreserror({ "message": data.message })
+                        seterrshow(true)
+                    }
+                    else {
+                        localStorage.setItem('authToken', data.token);
+                        localStorage.setItem('email', data.email_or_mobilenumber)
+                        localStorage.setItem('login', true);
+                        navigation('/profile');
+
+                    }
                 }
             } catch (error) {
-                console.error('Error:', error);
-                // Handle network error
+                console.log('Error');
+                setreserror({ "message": error })
+                seterrshow(true)
+
+            } finally {
+                setloader(false)
+
             }
-           
+
         } else {
             setIsSubmitted(false);
         }
@@ -96,8 +113,11 @@ function Login() {
 
 
     return (show ?
-        <div className="container login-form mt-4">
+        <div className="container login-form ">
             <form className="form" onSubmit={login}>
+                {loader ? <div className='loaderHead'>
+                    <div className="loader"></div>
+                </div> : null}
                 <div className="note">
                     <h1>Login</h1>
                 </div>
@@ -124,10 +144,11 @@ function Login() {
                         <p className=' login' onClick={registernav}>I Don't Have a Account</p>
                     </div>
 
+                    {errshow ? <div className='text-danger my-2 mess'>{reserror.message} </div> : null}
                 </div>
             </form>
-        </div>:null
-        )
+        </div> : null
+    )
 
 }
 export default Login;

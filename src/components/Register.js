@@ -3,8 +3,8 @@ import './css/register.css'
 import { useState, useEffect } from 'react';
 function Register() {
 
-    
-     
+
+
     // return the content
     const [show, setshow] = useState(false);
 
@@ -28,12 +28,13 @@ function Register() {
     // form validation
     const [formErrors, setFormErrors] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [inputs, setInputs] = useState({ 
+    const [inputs, setInputs] = useState({
         name: '',
         email: '',
-        mobilenumber:'',
+        mobilenumber: '',
         password: '',
-        repassword: ''})
+        repassword: ''
+    })
 
     const validate = () => {
         let errors = {};
@@ -126,7 +127,7 @@ function Register() {
                         setSubmitted(true)
                         setIsSubmitted(false)
                         setloader(false)
-                        
+
 
                     }
                     else {
@@ -134,12 +135,13 @@ function Register() {
                         setIsSubmitted(true)
                         setSubmitted(false)
                         setloader(false)
-                        setInputs({ 
+                        setInputs({
                             name: '',
                             email: '',
-                            mobilenumber:'',
+                            mobilenumber: '',
                             password: '',
-                            repassword: ''})
+                            repassword: ''
+                        })
 
                     }
 
@@ -157,18 +159,18 @@ function Register() {
                 setResError({ "error": error })
                 setloader(false)
             }
-            
+
         } else {
             setIsSubmitted(false);
         }
     }
     return (show ? <>
 
-        <div className="container register-form mt-4">
+        <div className="container register-form">
 
             <form className="form" onSubmit={register}>
                 {loader ? <div className='loaderHead'>
-                    <div class="loader"></div>
+                    <div className="loader"></div>
                 </div> : null}
                 <div className="note">
                     <h1>Register</h1>
@@ -178,21 +180,21 @@ function Register() {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="form-group">
-                                <input type="text" className="form-control" placeholder="Your Name *" name='name' onChange={change}  value={inputs.name}  />
+                                <input type="text" className="form-control" placeholder="Your Name *" name='name' onChange={change} value={inputs.name} />
                             </div>
                             {formErrors.username && <span>{formErrors.username}</span>}
                             <div className="form-group">
-                                <input type="text" className="form-control" placeholder="email *" name='email' onChange={change}  value={inputs.email}  />
+                                <input type="text" className="form-control" placeholder="email *" name='email' onChange={change} value={inputs.email} />
                             </div>
                             {formErrors.email && <span>{formErrors.email}</span>}
                             <div className="form-group">
-                                <input type="text" className="form-control" placeholder="Mobile Number *" name='mobilenumber' onChange={change}  value={inputs.mobilenumber} />
+                                <input type="text" className="form-control" placeholder="Mobile Number *" name='mobilenumber' onChange={change} value={inputs.mobilenumber} />
                             </div>
                             {formErrors.mobilenumber && <span>{formErrors.mobilenumber}</span>}
                         </div>
                         <div className="col-md-12">
                             <div className="form-group">
-                                <input type="text" className="form-control" placeholder="Your Password *" name='password' onChange={change} value={inputs.password}/>
+                                <input type="text" className="form-control" placeholder="Your Password *" name='password' onChange={change} value={inputs.password} />
                             </div>
                             {formErrors.password && <span>{formErrors.password}</span>}
                             <div className="form-group">
